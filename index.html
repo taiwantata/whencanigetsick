@@ -1,38 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>When Can I Get Sick?</title>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+<title>When Can I Get Sick?</title>
 </head>
 <body>
+<div class="container">
 
 <h1>When Can I Get Sick?</h1>
 
-<p>
-    <a href="http://www.nhi.gov.tw/webdata/webdata.aspx?menu=19&amp;menu_id=777&amp;webdata_id=3506&amp;WD_ID=777">外國人投保規定</a><br>
-    <a href="http://www.nhi.gov.tw/English/webdata/webdata.aspx?menu=11&amp;menu_id=593&amp;WD_ID=593&amp;webdata_id=3148">Health Insurance Enrollment for Foreigners</a>
-</p>
+<ul>
+    <li><a href="http://www.nhi.gov.tw/webdata/webdata.aspx?menu=19&amp;menu_id=777&amp;webdata_id=3506&amp;WD_ID=777">外國人投保規定</a></li>
+    <li><a href="http://www.nhi.gov.tw/English/webdata/webdata.aspx?menu=11&amp;menu_id=593&amp;WD_ID=593&amp;webdata_id=3148">Health Insurance Enrollment for Foreigners</a></li>
+</ul>
 
-<p>
-    When did you get your resident permit?
-    <input type="date" id="permit-date">
-</p>
+<form>
+    <div class="form-group">
+        <label for="permit-date">When did you get your resident permit?</label>
+        <input type="date" id="permit-date" class="form-control">
+    </div>
 
-<p>
-    When was your first departure since you got your resident permit?<br>
-    Departure: <input type="date" id="departure-date"><br>
-    Arrival: <input type="date" id="arrival-date">
-</p>
+    <div class="form-group">
+        <p class="help">When was your first departure since you got your resident permit?</p>
+        <label for="departure-date">Departure:</label>
+        <input type="date" id="departure-date" class="form-control">
+    </div>
 
-<p>
-    Second departure?
-    <input type="checkbox" id="second-departure">
-</p>
+    <div class="form-group">
+        <label for="arrival-date">Arrival:</label>
+        <input type="date" id="arrival-date" class="form-control">
+    </div>
 
-<p>
-    <button id="submit">Submit</button>
-</p>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" id="second-departure"> Do second departure
+        </label>
+    </div>
 
-<p id="result"></p>
+    <button id="submit" type="button" class="btn btn-primary">Submit</button>
+</form>
+
+<p id="result" class="alert alert-info" style="margin-top:20px;display:none;"></p>
+
+</div><!-- .container -->
 
 <script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment.min.js"></script>
@@ -67,7 +77,12 @@ function getDay(selector) {
 }
 
 function setResult(msg) {
-    $('#result').text(msg);
+    var $result = $('#result');
+    if (msg) {
+        $result.text(msg).show();
+    } else {
+        $result.hide();
+    }
 }
 
 function hasSecondDeparture() {
