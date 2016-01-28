@@ -1,11 +1,113 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>When Can I Get Sick?</title>
+    <title>When Can I Get Sick?</title>
 </head>
 <body>
 
 <h1>When Can I Get Sick?</h1>
+
+<p>
+    <a href="http://www.nhi.gov.tw/webdata/webdata.aspx?menu=19&amp;menu_id=777&amp;webdata_id=3506&amp;WD_ID=777">外國人投保規定</a><br>
+    <a href="http://www.nhi.gov.tw/English/webdata/webdata.aspx?menu=11&amp;menu_id=593&amp;WD_ID=593&amp;webdata_id=3148">Health Insurance Enrollment for Foreigners</a>
+</p>
+
+<p>
+    When did you get your resident permit?
+    <input type="date" id="permit-date">
+</p>
+
+<p>
+    When was your first departure since you got your resident permit?<br>
+    Departure: <input type="date" id="departure-date"><br>
+    Arrival: <input type="date" id="arrival-date">
+</p>
+
+<p>
+    Second departure?
+    <input type="checkbox" id="second-departure">
+</p>
+
+<p>
+    <button id="submit">Submit</button>
+</p>
+
+<p id="result"></p>
+
+<script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment.min.js"></script>
+<script>
+
+function validate() {
+    if (!$('#permit-date').val()) {
+        setResult('When did you get your resident permit?');
+        return false;
+    }
+
+    var departure = $('#departure-date').val();
+    var arrival = $('#arrival-date').val();
+
+    if (departure && !arrival) {
+        setResult('You must choose an arrival date.');
+        return false;
+    } else if (!departure && arrival) {
+        setResult('You must choose a departure date.');
+        return false;
+    }
+
+    return true;
+}
+
+function getDay(selector) {
+    var day = $(selector).val();
+    if (day) {
+        return moment(day);
+    }
+    return null;
+}
+
+function setResult(msg) {
+    $('#result').text(msg);
+}
+
+function hasSecondDeparture() {
+    return $('#second-departure').prop('checked');
+}
+
+$(function() {
+
+    $('#submit').click(function() {
+        if (!validate()) {
+            return;
+        }
+
+        var departure = getDay('#departure-date');
+        var arrival = getDay('#arrival-date');
+
+        var daysOut = 0;
+        if (departure && arrival) {
+            daysOut = arrival.diff(departure, 'days');
+            if (daysOut > 30) {
+                setResult("You can't departure over 30 days.");
+                return;
+            }
+        }
+
+        if (hasSecondDeparture()) {
+            setResult("You can't departure twice.");
+            return;
+        }
+
+        var day = moment($('#permit-date').val());
+        var daysToGo = 180 + daysOut;
+        day.add(daysToGo, 'days');
+
+        $('#result').text("You can get health insurance on " + day.format('YYYY-MM-DD') + ".");
+    });
+
+});
+
+</script>
 
 </body>
 </html>
